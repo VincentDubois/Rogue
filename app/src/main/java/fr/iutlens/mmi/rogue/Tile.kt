@@ -60,8 +60,8 @@ internal class Tile @JvmOverloads constructor(private val color: Int, val code: 
                 if (!tile.hasOneFlag(F_NOBACK)) {
                     level.spriteSheetBG!!.paint(canvas,
                             tile.getCode(x, y, level),
-                            x * level.spriteSheet!!.w.toFloat(),
-                            y * level.spriteSheet.h.toFloat(), tile.color)
+                            x * level.spriteSheetBG.w.toFloat(),
+                            y * level.spriteSheetBG.h.toFloat(), tile.color)
                 }
 
                 // Affichage du sprite de terrain

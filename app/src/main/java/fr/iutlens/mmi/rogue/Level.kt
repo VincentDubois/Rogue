@@ -4,19 +4,21 @@ import android.graphics.Canvas
 import fr.iutlens.mmi.rogue.util.Coordinate
 import fr.iutlens.mmi.rogue.util.SpriteSheet
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by dubois on 27/12/2017.
  */
 class Level(sizeX: Int, sizeY: Int, sprite_id: Int, sprite_bg_id: Int) {
-    val coord: Coordinate
-    val spriteSheet: SpriteSheet?
-    val spriteSheetBG: SpriteSheet?
-    private var ready: Boolean
+    val coord: Coordinate = Coordinate(sizeX, sizeY)
+    val spriteSheet: SpriteSheet? = SpriteSheet[sprite_id]
+    val spriteSheetBG: SpriteSheet? = SpriteSheet[sprite_bg_id]
+    private var ready: Boolean = false
     var start = 0
-    private val data: IntArray
-    private val content: MutableMap<Int, Sprite?>
-    val zone: Array<Zone?>
+    private val data: IntArray = IntArray(sizeX * sizeY)
+    private val content: MutableMap<Int, Sprite> = HashMap()
+    val zone: Array<Zone?> = arrayOfNulls(9)
+
     fun generate() {
         Zone.generateZone(this)
         val generator = RoomGenerator(this)
@@ -41,9 +43,9 @@ class Level(sizeX: Int, sizeY: Int, sprite_id: Int, sprite_bg_id: Int) {
         return content[ndx]
     }
 
-    fun setContent(x: Int, y: Int, sprite: Sprite?) {
+    fun setContent(x: Int, y: Int, sprite: Sprite) {
         content[coord.getNdx(x, y)] = sprite
-        sprite!!.x = x
+        sprite.x = x
         sprite.y = y
     }
 
@@ -53,7 +55,7 @@ class Level(sizeX: Int, sizeY: Int, sprite_id: Int, sprite_bg_id: Int) {
         sprite.y = coord.getY(ndx)
     }
 
-    fun removeContent(ndx: Int) {
+    private fun removeContent(ndx: Int) {
         content.remove(ndx)
     }
 
@@ -110,13 +112,4 @@ class Level(sizeX: Int, sizeY: Int, sprite_id: Int, sprite_bg_id: Int) {
         }
     }
 
-    init {
-        spriteSheet = SpriteSheet.Companion.get(sprite_id)
-        spriteSheetBG = SpriteSheet.Companion.get(sprite_bg_id)
-        coord = Coordinate(sizeX, sizeY)
-        data = IntArray(sizeX * sizeY)
-        content = HashMap()
-        zone = arrayOfNulls(9)
-        ready = false
-    }
 }

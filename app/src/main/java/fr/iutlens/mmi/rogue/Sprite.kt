@@ -32,11 +32,11 @@ class Sprite {
     }
 
     fun block(): Boolean {
-        return Tile.get(id)!!.hasOneFlag(Tile.F_BLOCK)
+        return Tile[id]!!.hasOneFlag(Tile.F_BLOCK)
     }
 
     fun effect(level: Level?, hero: Hero?) {
-        if (Tile.get(id)!!.hasOneFlag(Tile.F_MONSTER or Tile.F_CONSOMMABLE)) {
+        if (Tile[id]!!.hasOneFlag(Tile.F_MONSTER or Tile.F_CONSOMMABLE)) {
             level!!.removeContent(x, y)
         }
     }

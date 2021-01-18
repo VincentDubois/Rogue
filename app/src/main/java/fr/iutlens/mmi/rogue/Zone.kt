@@ -9,7 +9,7 @@ class Zone {
     var border = 0
 
     constructor() {
-        typeA = Tile.Companion.ROCK //typeChooser.getOne();
+        typeA = Tile.ROCK //typeChooser.getOne();
         typeB = typeChooser.getOne(typeA)
     }
 

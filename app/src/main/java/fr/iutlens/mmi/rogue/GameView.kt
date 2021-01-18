@@ -3,6 +3,7 @@ package fr.iutlens.mmi.rogue
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Matrix
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -15,6 +16,23 @@ class GameView : View, OnTouchListener {
     private lateinit var hero: Hero
     private var transform = Matrix()
     private var inverse = Matrix()
+
+    val paintTop =Paint().apply {
+        color = 0x88000000.toInt()
+        style = Paint.Style.FILL
+    }
+
+    val paintLife =Paint().apply {
+        color = 0xFFFF0000.toInt()
+        style = Paint.Style.FILL
+    }
+
+    val paintLifeBorder =Paint().apply {
+        color = 0xFFFF0000.toInt()
+        style = Paint.Style.STROKE
+        strokeWidth = 2f
+    }
+
 
     constructor(context: Context?) : super(context) {
         init(null, 0)
@@ -62,6 +80,11 @@ class GameView : View, OnTouchListener {
      * @param canvas
      */
     override fun onDraw(canvas: Canvas) {
+
+
+
+
+
         super.onDraw(canvas)
         // On met une couleur de fond
         canvas.drawColor(-0x1000000)
@@ -70,6 +93,8 @@ class GameView : View, OnTouchListener {
 
 
 
+
+        canvas.save()
         // On choisit la transformation à appliquer à la vue i.e. la position
         // de la "camera"
         setCamera(canvas)
@@ -77,6 +102,19 @@ class GameView : View, OnTouchListener {
         // Dessin des différents éléments
         level.paint(canvas, hero.x, hero.y, MIN_VISIBLE_TILES)
         hero.paint(canvas)
+
+
+
+        val htop = this.resources.getDimension(R.dimen.htop)
+        val margin = this.resources.getDimension(R.dimen.margin)
+
+        canvas.restore()
+        canvas.drawRect(0f,0f, width.toFloat(),htop,paintTop)
+        val life = 80
+        canvas.drawRect(margin, margin, margin*5*(life/100f), margin*2, paintLife)
+        canvas.drawRect(margin, margin, margin*5, margin*2, paintLifeBorder)
+
+//        canvas.drawRect()
 
     }
 
@@ -140,7 +178,7 @@ class GameView : View, OnTouchListener {
 
     private fun move(dir: Int) {
         // Déplacement proprement dit
-        hero!!.move(dir)
+        hero.move(dir)
 
         // On récupère le contenu de la case, et on applique l'effet si on trouve qq chose
         val sprite = level.getContent(hero.x, hero.y)

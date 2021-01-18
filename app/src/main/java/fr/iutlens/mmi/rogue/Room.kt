@@ -234,7 +234,7 @@ internal class Room(type: String?) {
                     var dy = -1
                     while (dy <= spec!!.height && can_place) {
                         val id = level[x0 + dx, y0 + dy]
-                        if (id == -1 || Tile.Companion.get(id)!!.hasOneFlag(Tile.Companion.F_BUILDING or Tile.Companion.F_SWIM)) can_place = false
+                        if (id == -1 || Tile[id]!!.hasOneFlag(Tile.F_BUILDING or Tile.F_SWIM)) can_place = false
                         ++dy
                     }
                     ++dx
@@ -253,7 +253,7 @@ internal class Room(type: String?) {
         x0 = x - opening!!.dx
         y0 = y - opening.dy
         for (dx in 0 until spec!!.width) for (dy in 0 until spec!!.height) {
-            level[x0 + dx, y0 + dy] = Tile.Companion.PAVEMENT
+            level[x0 + dx, y0 + dy] = Tile.PAVEMENT
         }
         for (s in spec!!.sprite) {
 //                Log.d("place",s.id+" "+s.prob);
@@ -263,29 +263,20 @@ internal class Room(type: String?) {
 
     fun addWall(level: Level) {
         for (dx in -1..spec!!.width) {
-            level[x0 + dx, y0 - 1] = Tile.Companion.F_WALL
-            level[x0 + dx, y0 + spec!!.height] = Tile.Companion.F_WALL
+            level[x0 + dx, y0 - 1] = Tile.F_WALL
+            level[x0 + dx, y0 + spec!!.height] = Tile.F_WALL
         }
         for (dy in -1..spec!!.height) {
-            level[x0 - 1, y0 + dy] = Tile.Companion.F_WALL
-            level[x0 + spec!!.width, y0 + dy] = Tile.Companion.F_WALL
+            level[x0 - 1, y0 + dy] = Tile.F_WALL
+            level[x0 + spec!!.width, y0 + dy] = Tile.F_WALL
         }
     }
 
     internal class Opening(val dx: Int, val dy: Int, val dir: Int, val spec: Spec)
 
-    class Link(var from: Room, opening: Opening, x: Int, y: Int) {
-        val x: Int
-        val y: Int
-        var to: Room?
-        var dir: Int
-
-        init {
-            dir = opening.dir
-            this.x = x
-            this.y = y
-            to = null
-        }
+    class Link(var from: Room, opening: Opening, val x: Int, val y: Int) {
+        var to: Room? = null
+        var dir: Int = opening.dir
     }
 
     init {
